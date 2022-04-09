@@ -69,7 +69,10 @@ def get_file_info(
             filename_list = os.listdir(fpath)
             for filename in filename_list:
                 child_fpath = os.path.join(fpath, filename)
-                filelist.append(get_file_info(child_fpath))
+                filelist.append(get_file_info(
+                    fpath=child_fpath,
+                    compute_hash=compute_hash,
+                ))
             return {
                 'filename': filename,
                 'filemode': filestat.st_mode,
