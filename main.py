@@ -30,10 +30,13 @@ def compute_filehash(
                 chunk = infile.read(chunksize)
                 md5_obj.update(chunk)
 
-    return md5_obj.hexdigest()
+    return md5_obj.digest()
 
 
-def get_file_info(fpath):
+def get_file_info(
+    fpath,
+    compute_hash=False,
+):
     filename = os.path.basename(fpath)
 
     try:
@@ -43,13 +46,23 @@ def get_file_info(fpath):
             filesize = filestat.st_size
             filehash = compute_filehash(fpath, filesize)
 
-            return {
-                'filename': filename,
-                'filemode': filestat.st_mode,
-                'filesize': filesize,
-                'filehash': filehash,
-                'modified': filestat.st_mtime,
-            }
+            if compute_hash:
+                filehash = compute_filehash(fpath, filesize)
+
+                return {
+                    'filename': filename,
+                    'filemode': filestat.st_mode,
+                    'filesize': filesize,
+                    'filehash': filehash,
+                    'modified': filestat.st_mtime,
+                }
+            else:
+                return {
+                    'filename': filename,
+                    'filemode': filestat.st_mode,
+                    'filesize': filesize,
+                    'modified': filestat.st_mtime,
+                }
         elif stat.S_ISDIR(filestat.st_mode):
             # TODO
             filelist = []
