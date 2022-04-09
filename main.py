@@ -44,7 +44,6 @@ def get_file_info(
 
         if stat.S_ISREG(filestat.st_mode):
             filesize = filestat.st_size
-            filehash = compute_filehash(fpath, filesize)
 
             if compute_hash:
                 filehash = compute_filehash(fpath, filesize)
